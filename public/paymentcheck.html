@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment - With Demo Features</title>
+    <style>
+        /* Previous styles remain the same */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: url('taxi.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+        }
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .qr-section img {
+            max-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .warning-message {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 100;
+            width: 80%;
+        }
+        /* Demo buttons style */
+        .demo-controls {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .tamper-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .reset-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .demo-log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Complete Your Payment</h2>
+        
+        <!-- Demo Controls Section -->
+        <div class="demo-controls">
+            <h4>Demonstration Controls</h4>
+            <button class="demo-btn tamper-btn" onclick="simulateTampering()">Simulate QR Code Tampering</button>
+            <button class="demo-btn reset-btn" onclick="resetQRCode()">Reset QR Code</button>
+            <div class="demo-log" id="demoLog"></div>
+        </div>
+
+        <div class="qr-section">
+            <img src="https://i.ibb.co/bKrw52k/gpay-qr.png" alt="GPay QR Code" id="qrCode" data-original-src="https://i.ibb.co/bKrw52k/gpay-qr.png">
+            <div class="warning-message" id="warningMessage">
+                WARNING: QR code has been tampered with. Do not proceed with payment.
+                Please refresh the page to get the original QR code.
+            </div>
+            <p>Scan the QR code using GPay to complete the payment.</p>
+        </div>
+
+        <script>
+            const qrCode = document.getElementById('qrCode');
+            const warningMessage = document.getElementById('warningMessage');
+            const demoLog = document.getElementById('demoLog');
+            const originalSrc = qrCode.getAttribute('data-original-src');
+
+            // Function to simulate tampering
+            function simulateTampering() {
+                // Simulate changing QR code to a different image
+                qrCode.src = "https://i.ibb.co/different-qr-code.png";
+                demoLog.innerHTML = "🚨 Tampering detected! QR code has been changed from the original source.";
+                checkQRCode();
+            }
+
+            // Function to reset QR code
+            function resetQRCode() {
+                qrCode.src = originalSrc;
+                warningMessage.style.display = 'none';
+                qrCode.style.opacity = '1';
+                demoLog.innerHTML = "✅ QR code reset to original state.";
+            }
+
+            // Function to check if QR code has been tampered with
+            function checkQRCode() {
+                const currentSrc = qrCode.src;
+                if (currentSrc !== originalSrc) {
+                    warningMessage.style.display = 'block';
+                    qrCode.style.opacity = '0.3';
+                    return false;
+                }
+                warningMessage.style.display = 'none';
+                qrCode.style.opacity = '1';
+                return true;
+            }
+
+            // Monitor QR code for changes
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                        checkQRCode();
+                    }
+                });
+            });
+
+            observer.observe(qrCode, {
+                attributes: true,
+                attributeFilter: ['src']
+            });
+        </script>
+    </div>
+</body>
+</html>

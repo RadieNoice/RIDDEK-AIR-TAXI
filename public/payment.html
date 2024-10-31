@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: url('taxi.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .qr-section img {
+            max-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .stripe-like {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .stripe-like label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stripe-like input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #135bb5;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Complete Your Payment</h2>
+        <div class="qr-section">
+            <img src="https://i.ibb.co/bKrw52k/gpay-qr.png" alt="GPay QR Code" id="qrCode">
+            <p>Scan the QR code using GPay to complete the payment.</p>
+        </div>
+
+        <div class="stripe-like">
+            <label for="card-number">Card Number:</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9101 1121">
+
+            <label for="expiry">Expiry Date:</label>
+            <input type="text" id="expiry" placeholder="MM/YY">
+
+            <label for="cvc">CVC:</label>
+            <input type="text" id="cvc" placeholder="CVC">
+
+            <button class="submit-btn">Submit Payment</button>
+        </div>
+
+        <div class="message" id="formMessage"></div>
+    </div>
+    
+
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            localStorage.setItem('redirectTo', 'payment.html'); // Store intended action
+            window.location.href = 'login.html';
+        }
+
+        const submitButton = document.querySelector('.submit-btn');
+        const messageDiv = document.getElementById('formMessage');
+
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            messageDiv.textContent = 'Payment submitted successfully. Redirecting to home page...';
+
+            // Redirect to the home page after 2 seconds
+            setTimeout(function() {
+                window.location.href = 'home.html'; // Redirect to home page
+            }, 2000); // 2-second delay before redirect
+        });
+    </script>
+</body>
+</html>

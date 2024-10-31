@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirTaxi - Login or Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0062ff;
+            --primary-dark: #0052d6;
+            --primary-light: #e6f0ff;
+            --secondary: #4caf50;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --background: #f5f7fa;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --nav-text: #333333;
+            --input-bg: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --error: #e74c3c;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('taxi.png') no-repeat center center/cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header Navigation */
+        header {
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--nav-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* Form Container */
+        .form-wrapper {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 24px;
+            max-width: 460px;
+            width: 90%;
+            box-shadow: var(--shadow);
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .form-wrapper h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .form-wrapper p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-wrapper label {
+            display: block;
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .form-wrapper input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 2.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .form-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+            outline: none;
+        }
+
+        .form-wrapper button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-wrapper button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .form-wrapper button:active {
+            transform: translateY(1px);
+        }
+
+        .form-wrapper button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .form-wrapper .toggle-text {
+            font-size: 0.95rem;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .form-wrapper .toggle-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .form-wrapper .toggle-text a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .message {
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            display: block;
+            border: 1px solid var(--success);
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--error);
+            display: block;
+            border: 1px solid var(--error);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .form-wrapper {
+                padding: 2rem;
+                margin-top: 4rem;
+            }
+
+            .form-wrapper h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul {
+                display: none;
+            }
+
+            .form-wrapper {
+                padding: 1.5rem;
+                margin-top: 3rem;
+            }
+
+            .form-wrapper h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-wrapper input {
+                padding: 0.875rem 1rem 0.875rem 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="logo.png" alt="AirTaxi Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="bookings.html"><i class="fas fa-taxi"></i> Book a Taxi</a></li>
+                    <li><a href="search.html"><i class="fas fa-search"></i> Search</a></li>
+                    <li><a href="trips.html"><i class="fas fa-route"></i> My Trips</a></li>
+                    <li><a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login/Register Form Container -->
+    <section class="form-wrapper">
+        <h2 id="formTitle">Login</h2>
+        <p>Access your account or create a new one to book a premium air taxi service.</p>
+        <form id="userForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" id="submitButton">Login</button>
+        </form>
+
+        <div class="message" id="formMessage"></div>
+
+        <div class="toggle-text">
+            Don't have an account?
+            <a href="#" id="toggleForm">Register here</a>
+        </div>
+    </section>
+
+    <!-- Script section - Modified for Admin Functionality -->
+    <script>
+        let isLogin = true;
+        const formTitle = document.getElementById('formTitle');
+        const submitButton = document.getElementById('submitButton');
+        const toggleFormLink = document.getElementById('toggleForm');
+        const formMessage = document.getElementById('formMessage');
+
+        // Toggle between Login and Register forms
+        toggleFormLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            isLogin = !isLogin;
+            formTitle.textContent = isLogin ? 'Login' : 'Register';
+            submitButton.textContent = isLogin ? 'Login' : 'Register';
+            toggleFormLink.textContent = isLogin ? 'Register here' : 'Login here';
+            formMessage.textContent = '';
+            formMessage.classList.remove('success', 'error');
+            document.querySelector('.toggle-text').childNodes[0].textContent = isLogin ? "Don't have an account? " : 'Already have an account? ';
+            document.getElementById('userForm').reset();
+        });
+
+        // Handle form submission for both Login and Register
+        document.getElementById('userForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            formMessage.textContent = '';
+            formMessage.classList.remove('success', 'error');
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Basic Frontend Validation
+            if (username.length < 3) {
+                showMessage('Username must be at least 3 characters long.', 'error');
+                return;
+            }
+
+            if (password.length < 5) {
+                showMessage('Password must be at least 5 characters long.', 'error');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = isLogin ? 'Logging in...' : 'Registering...';
+
+            try {
+                const userData = { username, password };
+                const url = isLogin ? 'http://localhost:3000/login' : 'http://localhost:3000/register';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem('userToken', data.token);
+                    showMessage(isLogin ? 'Login successful! Redirecting...' : 'Registration successful! Redirecting...', 'success');
+
+                    // Fetch user details to determine role
+                    const userDetailsResponse = await fetch('http://localhost:3000/user/details', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    });
+
+                    if (userDetailsResponse.ok) {
+                        const userDetails = await userDetailsResponse.json();
+                        const userRole = userDetails.role || 'user'; // Default to 'user' if role is undefined
+
+                        // Redirect based on role
+                        setTimeout(() => {
+                            if (userRole === 'admin') {
+                                window.location.href = 'admin.html'; // Ensure this page exists
+                            } else {
+                                window.location.href = 'home.html';
+                            }
+                        }, 1500);
+                    } else {
+                        // If unable to fetch user details, default redirect
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 1500);
+                    }
+                } else {
+                    // Handle Errors
+                    const errorMsg = data.message || 'An error occurred. Please try again.';
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again later.', 'error');
+                console.error('Error:', error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = isLogin ? 'Login' : 'Register';
+            }
+        });
+
+        // Function to display messages
+        function showMessage(message, type) {
+            formMessage.textContent = message;
+            formMessage.classList.add(type);
+            formMessage.style.display = 'block';
+            // Automatically hide the message after 3 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+                formMessage.classList.remove(type);
+                formMessage.textContent = '';
+            }, 3000);
+        }
+
+        // Optional: Check if user is already logged in and redirect accordingly
+        window.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('userToken');
+            if (token) {
+                try {
+                    const validateResponse = await fetch('http://localhost:3000/validateToken', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (validateResponse.ok) {
+                        const validateData = await validateResponse.json();
+                        const userRole = validateData.user.role || 'user';
+
+                        // Redirect based on role
+                        if (userRole === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'bookings.html';
+                        }
+                    } else {
+                        // Invalid token, remove it
+                        localStorage.removeItem('userToken');
+                    }
+                } catch (error) {
+                    console.error('Error validating token:', error);
+                    localStorage.removeItem('userToken');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
